@@ -1,24 +1,26 @@
 import { describe, it, expect } from 'vitest'
 import { RegisterUseCase } from './register-use-case'
 import { compare } from 'bcryptjs'
+import { InMemoryRepository } from '@/repositories/in-memory/in-memory-repository'
+import { UserAlreadyExistsError } from './errors/user-already-exists-error'
 
 describe('Register use case', () => {
-  it('should hash password upon registration', async () => {
-    const registerUseCase = new RegisterUseCase({
-      async create(data) {
-        return {
-          id: 'user-1',
-          name: data.name,
-          email: data.email,
-          password_hash: data.password_hash,
-          created_at: new Date()
-        }
-      },
+  it('should be able to register', async () => {
+    const inMemmoryRepository = new InMemoryRepository
+    const registerUseCase = new RegisterUseCase(inMemmoryRepository)
 
-      async findByEmail(email) {
-        return null
-      },
+    const { user } = await registerUseCase.execute({
+      name: 'John Doe',
+      email: 'johndoe@example.com',
+      password: '123456',
     })
+
+    expect(user.id).toEqual(expect.any(String))
+  })
+
+  it('should hash password upon registration', async () => {
+    const inMemmoryRepository = new InMemoryRepository
+    const registerUseCase = new RegisterUseCase(inMemmoryRepository)
 
     const { user } = await registerUseCase.execute({
       name: 'John Doe',
@@ -32,5 +34,24 @@ describe('Register use case', () => {
     )
 
     expect(isPasswordCorretlyHashed).toBe(true)
+  })
+
+  it('should not register with the same email twice', async () => {
+    const inMemmoryRepository = new InMemoryRepository
+    const registerUseCase = new RegisterUseCase(inMemmoryRepository)
+
+    const email = 'johndoe@example.com'
+
+    await registerUseCase.execute({
+      name: 'John Doe',
+      email,
+      password: '123456'
+    })
+
+    expect(registerUseCase.execute({
+      name: 'John Doe',
+      email,
+      password: '123456'
+    })).rejects.toBeInstanceOf(UserAlreadyExistsError)
   })
 })
