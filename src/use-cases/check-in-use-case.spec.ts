@@ -83,4 +83,22 @@ describe('Check In use Case', () => {
 
     expect(checkIn.id).toEqual(expect.any(String))
   })
+
+  it('should not be able to check in on distant gym', async () => {
+    inMemoryGymRepository.items.push({
+      id: 'gym-02',
+      description: '',
+      title: 'JS Academy 2',
+      phone: '',
+      latitude: new Prisma.Decimal(-22.9305763),
+      longitude: new Prisma.Decimal(-47.0312354), 
+    })
+
+    await expect(() => sut.execute({
+      gymId: 'gym-02',
+      userId: 'user-01',
+      userLatitude: -22.9405064,
+      userLongitude: -47.0096692,
+    })).rejects.toBeInstanceOf(Error)
+  })
 })
