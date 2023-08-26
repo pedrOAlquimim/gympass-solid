@@ -1,5 +1,5 @@
 import { InMemoryCheckInRepository } from "@/repositories/in-memory/in-memory-check-in-repository";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CheckInUseCase } from "./check-in-use-case";
 
 let inMemoryCheckInRepository: InMemoryCheckInRepository
@@ -9,6 +9,12 @@ describe('Check In use Case', () => {
   beforeEach(() => {
     inMemoryCheckInRepository = new InMemoryCheckInRepository()
     sut = new CheckInUseCase(inMemoryCheckInRepository)
+
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
   })
   
   it('should be able to check in', async () => {
@@ -18,5 +24,21 @@ describe('Check In use Case', () => {
     })
 
     expect(checkIn.id).toEqual(expect.any(String))
+  })
+
+  it('should not be able to check in twice in the same day', async () => {
+    vi.setSystemTime(new Date(2022, 0, 20, 8, 0, 0))
+
+    await sut.execute({
+      gymId: 'gym-01',
+      userId: 'user-01',
+    })
+
+    await expect(() =>
+      sut.execute({
+        gymId: 'gym-01',
+        userId: 'user-01',
+      }),
+    ).rejects.toBeInstanceOf(Error)
   })
 })
