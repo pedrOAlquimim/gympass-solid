@@ -9,12 +9,12 @@ let inMemoryGymRepository: InMemoryGymRepository
 let sut: CheckInUseCase
 
 describe('Check In use Case', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     inMemoryCheckInRepository = new InMemoryCheckInRepository()
     inMemoryGymRepository = new InMemoryGymRepository()
     sut = new CheckInUseCase(inMemoryCheckInRepository, inMemoryGymRepository)
 
-    inMemoryGymRepository.items.push({
+    await inMemoryGymRepository.create({
       id: 'gym-01',
       description: '',
       title: 'JS Academy',
