@@ -5,4 +5,6 @@ export interface CheckInsRepository {
   create: (data: Prisma.CheckInUncheckedCreateInput) => Promise<CheckIn>
   findManyByUserId: (userId: string, page: number) => Promise<CheckIn[]>
   countCheckInsByUserId: (userId: string) => Promise<number>
+  findById: (checkInId: string) => Promise<CheckIn | null>
+  save: (checkIn: CheckIn) => Promise<CheckIn>
 }
