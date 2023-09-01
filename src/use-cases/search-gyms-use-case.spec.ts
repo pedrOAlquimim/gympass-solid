@@ -2,16 +2,16 @@ import { InMemoryCheckInRepository } from "@/repositories/in-memory/in-memory-ch
 import { beforeEach, describe, expect, it } from "vitest";
 import { FecthUserCheckInsHistoryUseCase } from "./fetch-user-check-ins-history-use-case";
 import { InMemoryGymRepository } from "@/repositories/in-memory/in-memory-gym-repository";
-import { SearchGymUseCase } from "./search-gyms-use-case";
+import { SearchGymsUseCase } from "./search-gyms-use-case";
 import { Prisma } from "@prisma/client";
 
 let inMemoryGymsRepository: InMemoryGymRepository
-let sut: SearchGymUseCase
+let sut: SearchGymsUseCase
 
 describe('Search Gyms use Case', () => {
   beforeEach(async () => {
     inMemoryGymsRepository = new InMemoryGymRepository()
-    sut = new SearchGymUseCase(inMemoryGymsRepository)
+    sut = new SearchGymsUseCase(inMemoryGymsRepository)
   })
   
   it('should be able get a gym', async () => {

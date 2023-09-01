@@ -8,6 +8,7 @@ abstract class CreatorRegisterUseCase {
 export class PrismaCreateRegisterUseCase extends CreatorRegisterUseCase {
   public factoryMethod(): RegisterUseCase {
     const usersRepository = new PrismaUsersRepository()
+    
     const registerUseCase = new RegisterUseCase(usersRepository)
 
     return registerUseCase
