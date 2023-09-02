@@ -6,3 +6,5 @@ coverage
 
 ## enviroment
 .env
+
+api-solid-pg.session.sql
