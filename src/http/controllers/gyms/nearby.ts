@@ -4,8 +4,8 @@ import { z } from "zod";
 
 export async function nearby(request: FastifyRequest, reply: FastifyReply) {
   const requestBodySchema = z.object({
-    latitude: z.number(),
-    longitude: z.number(),
+    latitude: z.coerce.number(),
+    longitude: z.coerce.number(),
   })
 
   const { latitude, longitude } = requestBodySchema.parse(request.query)

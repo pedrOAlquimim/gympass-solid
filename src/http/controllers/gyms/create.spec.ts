@@ -1,4 +1,5 @@
 import { app } from "@/app";
+import { registerAndAuthenticateUse } from "@/utils/test/register-and-authenticate-use";
 import supertest from "supertest";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
@@ -10,25 +11,9 @@ afterAll(async () => {
   await app.close()
 })
 
-describe('Create controlle E2E', () => {
+describe('Create (gyms) controlle E2E', () => {
   it('should be able to create gym', async () => {
-    await supertest(app.server)
-      .post('/users')
-      .send({
-        name: 'John Doe',
-        email: 'johnsdoe@example.com',
-        password: '123456',
-      })
-      .expect(201)
-
-    const authResponse = await supertest(app.server)
-      .post('/sessions')
-      .send({
-        email: 'johnsdoe@example.com',
-        password: '123456',
-      })
-
-    const { token } = authResponse.body
+    const { token } = await registerAndAuthenticateUse(app)
 
     const response = await supertest(app.server)
       .post('/gyms')
