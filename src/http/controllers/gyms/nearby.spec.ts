@@ -13,7 +13,7 @@ afterAll(async () => {
 
 describe('Search (gyms) controlle E2E', () => {
   it('should be able to fetch a nearby gym', async () => {
-    const { token } = await registerAndAuthenticateUse(app)
+    const { token } = await registerAndAuthenticateUse(app, true)
 
     await supertest(app.server)
       .post('/gyms')

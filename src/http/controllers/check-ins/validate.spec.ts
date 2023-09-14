@@ -14,7 +14,7 @@ afterAll(async () => {
 
 describe('Create (check-ins) controller E2E', () => {
   it('should be able to check-in', async () => {
-    const { token } = await registerAndAuthenticateUse(app)
+    const { token } = await registerAndAuthenticateUse(app, true)
 
     const user = await prisma.user.findFirstOrThrow()
 
